@@ -7,30 +7,48 @@
 //
 
 import XCTest
-@testable import EventTracker
+import EventTracker
+
+class TestEvent : Event {
+    func toString() -> String {
+        return "event"
+    }
+}
 
 class EventTrackerTests: XCTestCase {
     
+    var tracker: EventTracker!
+    var store: EventStore!
+    
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        self.store = TestEventStore()
+        let config = EventTrackerConfiguration(store: self.store, uploader: TestEventTrackerUploader(), flushPolicy: .Manual)
+        self.tracker = EventTracker(configuration: config)
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testTrackingSingleEvent() {
+        self.tracker.trackEvent(event: TestEvent())
+        XCTAssert(store.allEvents().count == 1)
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testFlushing() {
+        self.tracker.trackEvent(event: TestEvent())
+        self.tracker.flushEvents()
+        XCTAssert(store.allEvents().count == 0)
+    }
+    
+    func testLimitFlushingPolicy() {
+        let config = EventTrackerConfiguration(store: self.store, uploader: TestEventTrackerUploader(), flushPolicy: .EventLimit(limit: 2))
+        self.tracker = EventTracker(configuration: config)
+        self.tracker.trackEvent(event: TestEvent())
+        self.tracker.trackEvent(event: TestEvent())
+        self.tracker.trackEvent(event: TestEvent())
+        XCTAssert(store.allEvents().count == 1)
     }
     
 }
