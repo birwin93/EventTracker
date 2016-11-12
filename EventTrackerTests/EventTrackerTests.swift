@@ -49,23 +49,43 @@ class BaseEventTrackerTests : XCTestCase {
     }
     
     func testTrackingSingleEvent() {
-        try! self.tracker.trackEvent(event: TestEvent())
-        XCTAssertEqual(try! self.store.allEvents().count, 1)
+        let expect = expectation(description:"")
+        
+        self.tracker.trackEvent(event: TestEvent(), completion: { (error) in
+            expect.fulfill()
+        })
+        
+        self.waitForExpectations(timeout: 5.0, handler: { (error) in
+            XCTAssertEqual(try! self.store.allEvents().count, 1)
+        })
     }
     
     func testFlushing() {
-        try! self.tracker.trackEvent(event: TestEvent())
-        try! self.tracker.flushEvents()
-        XCTAssertEqual(try! self.store.allEvents().count, 0)
+        let expect = expectation(description:"")
+        
+        self.tracker.trackEvent(event: TestEvent(), completion: nil)
+        self.tracker.flushEvents { (error) in
+            expect.fulfill()
+        }
+        
+        self.waitForExpectations(timeout: 5.0, handler: { (error) in
+            XCTAssertEqual(try! self.store.allEvents().count, 0)
+        })
     }
     
     func testLimitFlushingPolicy() {
+        let expect = expectation(description:"")
+        
         let config = EventTrackerConfiguration(store: store, uploader: TestEventTrackerUploader(), flushPolicy: .EventLimit(limit: 2))
         let newTracker = EventTracker(configuration: config)
-        try! newTracker.trackEvent(event: TestEvent())
-        try! newTracker.trackEvent(event: TestEvent())
-        try! newTracker.trackEvent(event: TestEvent())
-        XCTAssertEqual(try! self.store.allEvents().count, 1)
+        newTracker.trackEvent(event: TestEvent(), completion: nil)
+        newTracker.trackEvent(event: TestEvent(), completion: nil)
+        newTracker.trackEvent(event: TestEvent(), completion: { (error) in
+            expect.fulfill()
+        })
+        self.waitForExpectations(timeout: 5.0, handler: { (error) in
+            XCTAssertEqual(try! self.store.allEvents().count, 1)
+        })
     }
     
 }
@@ -78,30 +98,43 @@ class FileEventTracker : BaseEventTrackerTests {
     }
     
     func testWritingMultipleFileBatches() {
+        let expect = expectation(description:"")
         self.tracker = self.trackerWithBatchSize(batchSize: 2)
         
-        for _ in 0...7 {
-            try! self.tracker.trackEvent(event: TestEvent())
+        for _ in 0...6 {
+            self.tracker.trackEvent(event: TestEvent(), completion: nil)
         }
-        
-        XCTAssertEqual(try! self.store.allEvents().count, 8)
+        self.tracker.trackEvent(event: TestEvent(), completion: { (error) in
+            expect.fulfill()
+        })
+            
+        self.waitForExpectations(timeout: 5.0, handler: { (error) in
+            XCTAssertEqual(try! self.store.allEvents().count, 8)
+        })
         
     }
     
     func testWritingMultipleFileBatchesWithFlushes() {
+        let expect = expectation(description:"")
         self.tracker = self.trackerWithBatchSize(batchSize: 2)
         
         for _ in 0...7 {
-            try! self.tracker.trackEvent(event: TestEvent())
+            self.tracker.trackEvent(event: TestEvent(), completion: nil)
         }
         
-        try! self.tracker.flushEvents()
+        self.tracker.flushEvents(completion: nil)
         
-        for _ in 0...5 {
-            try! self.tracker.trackEvent(event: TestEvent())
+        for _ in 0...4 {
+            self.tracker.trackEvent(event: TestEvent(), completion: nil)
         }
         
-        XCTAssertEqual(try! self.store.allEvents().count, 6)
+        self.tracker.trackEvent(event: TestEvent(), completion: { (error) in
+            expect.fulfill()
+        })
+        
+        self.waitForExpectations(timeout: 5.0, handler: { (error) in
+            XCTAssertEqual(try! self.store.allEvents().count, 6)
+        })
     }
     
     // MARK: Private

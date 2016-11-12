@@ -33,9 +33,10 @@ public class InMemoryEventStore : EventStore {
 }
 
 enum FileEventStoreError: Error {
-    case fileNotFound(filePath: String)
-    case couldNotWrite(msg: String)
-    case couldNotRead(msg: String)
+    case fileNotFound
+    case couldNotWrite
+    case couldNotRead
+    case couldNotDelete
 }
 
 public class FileEventStore : EventStore {
@@ -75,7 +76,7 @@ public class FileEventStore : EventStore {
             for index in 0...self.currentBatchIndex-1 {
                 let path = try getFilePath(batchIndex: index)
                 guard let batchEvents = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? [Event] else  {
-                    throw FileEventStoreError.couldNotRead(msg: "data was wrong")
+                    throw FileEventStoreError.couldNotRead
                 }
                 events.append(contentsOf: batchEvents)
             }
@@ -91,7 +92,7 @@ public class FileEventStore : EventStore {
                 do {
                     try FileManager.default.removeItem(atPath: path)
                 } catch {
-                    // TODO: throw error
+                    throw FileEventStoreError.couldNotDelete
                 }
             }
         }
@@ -110,7 +111,7 @@ public class FileEventStore : EventStore {
             }
             return fullPath
         } else {
-            throw FileEventStoreError.fileNotFound(filePath: "meh")
+            throw FileEventStoreError.fileNotFound
         }
     }
     
