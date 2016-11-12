@@ -10,6 +10,17 @@
 		283876EF1DD433FA0012185E /* EventTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 283876E51DD433FA0012185E /* EventTracker.framework */; };
 		283876F41DD433FA0012185E /* EventTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283876F31DD433FA0012185E /* EventTrackerTests.swift */; };
 		283876F61DD433FA0012185E /* EventTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 283876E81DD433FA0012185E /* EventTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283877031DD438E10012185E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283876FF1DD438E10012185E /* Event.swift */; };
+		283877041DD438E10012185E /* EventTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283877001DD438E10012185E /* EventTracker.swift */; };
+		283877051DD438E10012185E /* EventTrackerUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283877011DD438E10012185E /* EventTrackerUploader.swift */; };
+		283877061DD438E10012185E /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283877021DD438E10012185E /* EventStore.swift */; };
+		283877081DD43A640012185E /* TestEventLoggerUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283877071DD43A640012185E /* TestEventLoggerUploader.swift */; };
+		283877091DD43A8C0012185E /* EventTrackerUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283877011DD438E10012185E /* EventTrackerUploader.swift */; };
+		2838770A1DD43AA10012185E /* EventTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283877001DD438E10012185E /* EventTracker.swift */; };
+		2838770B1DD43AA50012185E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283876FF1DD438E10012185E /* Event.swift */; };
+		2838770C1DD43AA90012185E /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283877021DD438E10012185E /* EventStore.swift */; };
+		283877101DD4470D0012185E /* EventFlushPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2838770F1DD4470D0012185E /* EventFlushPolicy.swift */; };
+		283877111DD4470D0012185E /* EventFlushPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2838770F1DD4470D0012185E /* EventFlushPolicy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +40,12 @@
 		283876EE1DD433FA0012185E /* EventTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		283876F31DD433FA0012185E /* EventTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTrackerTests.swift; sourceTree = "<group>"; };
 		283876F51DD433FA0012185E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		283876FF1DD438E10012185E /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		283877001DD438E10012185E /* EventTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTracker.swift; sourceTree = "<group>"; };
+		283877011DD438E10012185E /* EventTrackerUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTrackerUploader.swift; sourceTree = "<group>"; };
+		283877021DD438E10012185E /* EventStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
+		283877071DD43A640012185E /* TestEventLoggerUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestEventLoggerUploader.swift; sourceTree = "<group>"; };
+		2838770F1DD4470D0012185E /* EventFlushPolicy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFlushPolicy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +89,11 @@
 			isa = PBXGroup;
 			children = (
 				283876E81DD433FA0012185E /* EventTracker.h */,
+				283876FF1DD438E10012185E /* Event.swift */,
+				283877001DD438E10012185E /* EventTracker.swift */,
+				283877011DD438E10012185E /* EventTrackerUploader.swift */,
+				283877021DD438E10012185E /* EventStore.swift */,
+				2838770F1DD4470D0012185E /* EventFlushPolicy.swift */,
 				283876E91DD433FA0012185E /* Info.plist */,
 			);
 			path = EventTracker;
@@ -81,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				283876F31DD433FA0012185E /* EventTrackerTests.swift */,
+				283877071DD43A640012185E /* TestEventLoggerUploader.swift */,
 				283876F51DD433FA0012185E /* Info.plist */,
 			);
 			path = EventTrackerTests;
@@ -149,6 +172,7 @@
 					283876E41DD433FA0012185E = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = LLR7SH732M;
+						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 					};
 					283876ED1DD433FA0012185E = {
@@ -198,6 +222,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				283877101DD4470D0012185E /* EventFlushPolicy.swift in Sources */,
+				283877041DD438E10012185E /* EventTracker.swift in Sources */,
+				283877031DD438E10012185E /* Event.swift in Sources */,
+				283877061DD438E10012185E /* EventStore.swift in Sources */,
+				283877051DD438E10012185E /* EventTrackerUploader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,7 +234,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				283877081DD43A640012185E /* TestEventLoggerUploader.swift in Sources */,
 				283876F41DD433FA0012185E /* EventTrackerTests.swift in Sources */,
+				2838770C1DD43AA90012185E /* EventStore.swift in Sources */,
+				2838770A1DD43AA10012185E /* EventTracker.swift in Sources */,
+				283877111DD4470D0012185E /* EventFlushPolicy.swift in Sources */,
+				283877091DD43A8C0012185E /* EventTrackerUploader.swift in Sources */,
+				2838770B1DD43AA50012185E /* Event.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +357,7 @@
 		283876FA1DD433FA0012185E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = LLR7SH732M;
@@ -334,6 +370,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.because.EventTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -341,6 +378,7 @@
 		283876FB1DD433FA0012185E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = LLR7SH732M;
@@ -360,6 +398,7 @@
 		283876FD1DD433FA0012185E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = LLR7SH732M;
 				INFOPLIST_FILE = EventTrackerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -372,6 +411,7 @@
 		283876FE1DD433FA0012185E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = LLR7SH732M;
 				INFOPLIST_FILE = EventTrackerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -400,6 +440,7 @@
 				283876FB1DD433FA0012185E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		283876FC1DD433FA0012185E /* Build configuration list for PBXNativeTarget "EventTrackerTests" */ = {
 			isa = XCConfigurationList;
@@ -408,6 +449,7 @@
 				283876FE1DD433FA0012185E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -32,12 +32,12 @@ public final class EventTracker {
         self.flushPolicy = configuration.flushPolicy
     }
     
-    func trackEvent(event: Event) {
-        store.storeEvent(event: event)
+    func trackEvent(event: Event) throws {
+        try store.storeEvent(event: event)
         
         switch self.flushPolicy {
         case .EventLimit(let limit):
-            self.flushIfStoreIsAtLimit(limit: limit)
+            try self.flushIfStoreIsAtLimit(limit: limit)
             break
         case .TimeInterval(let interval):
             self.startTimerIfNecessary(interval: interval)
@@ -49,22 +49,23 @@ public final class EventTracker {
     }
     
     @objc
-    func flushEvents() {
+    func flushEvents() throws {
         guard let uploader = self.uploader else { return }
-        let events = store.allEvents()
+        let events = try store.allEvents()
         uploader.uploadEvents(events: events)
-        self.clearEvents()
+        try self.clearEvents()
     }
     
-    func clearEvents() {
-        store.deleteEvents()
+    func clearEvents() throws {
+        try store.deleteEvents()
     }
     
     // MARK: Private
     
-    private func flushIfStoreIsAtLimit(limit: Int) {
-        if store.allEvents().count >= limit {
-            self.flushEvents()
+    private func flushIfStoreIsAtLimit(limit: Int) throws {
+        let storeCount = try store.allEvents().count
+        if storeCount >= limit {
+            try self.flushEvents()
         }
     }
     

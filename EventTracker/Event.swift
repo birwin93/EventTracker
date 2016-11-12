@@ -8,6 +8,7 @@
 
 import Foundation
 
-public protocol Event {
+@objc
+public protocol Event: class, NSCoding {
     func toString() -> String
 }
