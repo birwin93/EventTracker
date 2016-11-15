@@ -44,39 +44,40 @@ class BaseEventTrackerTests : XCTestCase {
     override func setUp() {
         super.setUp()
         self.store = InMemoryEventStore()
-        let config = EventTrackerConfiguration(store: store, uploader: TestEventTrackerUploader(), flushPolicy: .Manual)
+        let config = EventTrackerConfiguration(store: store, flusher: TestFlusher(), flushPolicy: .Manual)
         self.tracker = EventTracker(configuration: config)
     }
     
     func testTrackingSingleEvent() {
         let expect = expectation(description:"")
-        
         self.tracker.trackEvent(event: TestEvent(), completion: { (error) in
             expect.fulfill()
         })
         
         self.waitForExpectations(timeout: 5.0, handler: { (error) in
-            XCTAssertEqual(try! self.store.allEvents().count, 1)
+            self.store.allEvents { (events, error) in
+                XCTAssertEqual(events.count, 1)
+            }
         })
     }
     
     func testFlushing() {
         let expect = expectation(description:"")
-        
         self.tracker.trackEvent(event: TestEvent(), completion: nil)
         self.tracker.flushEvents { (error) in
             expect.fulfill()
         }
         
         self.waitForExpectations(timeout: 5.0, handler: { (error) in
-            XCTAssertEqual(try! self.store.allEvents().count, 0)
+            self.store.allEvents { (events, error) in
+                XCTAssertEqual(events.count, 0)
+            }
         })
     }
     
     func testLimitFlushingPolicy() {
         let expect = expectation(description:"")
-        
-        let config = EventTrackerConfiguration(store: store, uploader: TestEventTrackerUploader(), flushPolicy: .EventLimit(limit: 2))
+        let config = EventTrackerConfiguration(store: store, flusher: TestFlusher(), flushPolicy: .EventLimit(limit: 2))
         let newTracker = EventTracker(configuration: config)
         newTracker.trackEvent(event: TestEvent(), completion: nil)
         newTracker.trackEvent(event: TestEvent(), completion: nil)
@@ -84,7 +85,25 @@ class BaseEventTrackerTests : XCTestCase {
             expect.fulfill()
         })
         self.waitForExpectations(timeout: 5.0, handler: { (error) in
-            XCTAssertEqual(try! self.store.allEvents().count, 1)
+            self.store.allEvents { (events, error) in
+                XCTAssertEqual(events.count, 1)
+            }
+        })
+    }
+    
+    func testAsyncFlusher() {
+        let expect = expectation(description:"")
+        let config = EventTrackerConfiguration(store: store, flusher: TestAsyncFlusher(), flushPolicy: .EventLimit(limit: 2))
+        let newTracker = EventTracker(configuration: config)
+        newTracker.trackEvent(event: TestEvent(), completion: nil)
+        newTracker.trackEvent(event: TestEvent(), completion: nil)
+        newTracker.trackEvent(event: TestEvent(), completion: { (error) in
+            expect.fulfill()
+        })
+        self.waitForExpectations(timeout: 5.0, handler: { (error) in
+            self.store.allEvents { (events, error) in
+                XCTAssertEqual(events.count, 1)
+            }
         })
     }
     
@@ -109,7 +128,9 @@ class FileEventTracker : BaseEventTrackerTests {
         })
             
         self.waitForExpectations(timeout: 5.0, handler: { (error) in
-            XCTAssertEqual(try! self.store.allEvents().count, 8)
+            self.store.allEvents { (events, error) in
+                XCTAssertEqual(events.count, 8)
+            }
         })
         
     }
@@ -133,7 +154,9 @@ class FileEventTracker : BaseEventTrackerTests {
         })
         
         self.waitForExpectations(timeout: 5.0, handler: { (error) in
-            XCTAssertEqual(try! self.store.allEvents().count, 6)
+            self.store.allEvents { (events, error) in
+                XCTAssertEqual(events.count, 6)
+            }
         })
     }
     
@@ -141,7 +164,7 @@ class FileEventTracker : BaseEventTrackerTests {
     
     func trackerWithBatchSize(batchSize: Int) -> EventTracker {
         self.store = FileEventStore(batchSize: batchSize)
-        let config = EventTrackerConfiguration(store: store, uploader: TestEventTrackerUploader(), flushPolicy: .Manual)
+        let config = EventTrackerConfiguration(store: store, flusher: TestFlusher(), flushPolicy: .Manual)
         return EventTracker(configuration: config)
     }
 }

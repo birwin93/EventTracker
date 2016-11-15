@@ -8,26 +8,31 @@
 
 import Foundation
 
+public typealias EventStoreReturnCompletion = (([Event], Error?) -> Void)
+public typealias EventStoreCompletion = ((Error?) -> Void)
+
 public protocol EventStore {
-    func storeEvent(event: Event) throws
-    func allEvents() throws -> [Event]
-    func deleteEvents() throws
+    func storeEvent(event: Event, completion: @escaping EventStoreCompletion)
+    func allEvents(completion: @escaping EventStoreReturnCompletion)
+    func deleteEvents(completion: @escaping EventStoreCompletion)
 }
 
 public class InMemoryEventStore : EventStore {
     
     private var cache = [Event]()
     
-    public func storeEvent(event: Event) {
+    public func storeEvent(event: Event, completion: @escaping EventStoreCompletion) {
         self.cache.append(event)
+        completion(nil)
     }
     
-    public func allEvents() -> [Event] {
-        return self.cache
+    public func allEvents(completion: @escaping  EventStoreReturnCompletion) {
+        completion(self.cache, nil)
     }
     
-    public func deleteEvents() {
+    public func deleteEvents(completion: @escaping  EventStoreCompletion) {
         self.cache.removeAll()
+        completion(nil)
     }
     
 }
@@ -63,65 +68,76 @@ public class FileEventStore : EventStore {
         self.batchSize = batchSize
     }
     
-    public func storeEvent(event: Event) throws {
+    public func storeEvent(event: Event, completion: @escaping EventStoreCompletion) {
         self.batchCache.append(event)
         if self.batchCache.count > self.batchSize {
-            try self.writeBatchToFile()
+            self.writeBatchToFile(completion: completion)
+        } else {
+            completion(nil)
         }
     }
     
-    public func allEvents() throws -> [Event] {
+    public func allEvents(completion: @escaping EventStoreReturnCompletion) {
         var events = [Event]()
         if self.currentBatchIndex > 0 {
             for index in 0...self.currentBatchIndex-1 {
-                let path = try getFilePath(batchIndex: index)
-                guard let batchEvents = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? [Event] else  {
-                    throw FileEventStoreError.couldNotRead
+                if let path = getFilePath(batchIndex: index) {
+                    guard let batchEvents = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? [Event] else {
+                        completion([], FileEventStoreError.couldNotRead)
+                        return
+                    }
+                    events.append(contentsOf: batchEvents)
+                } else {
+                    completion([], FileEventStoreError.fileNotFound)
+                    return
                 }
-                events.append(contentsOf: batchEvents)
             }
         }
         events.append(contentsOf: self.batchCache)
-        return events
+        completion(events, nil)
     }
     
-    public func deleteEvents() throws {
+    public func deleteEvents(completion: @escaping EventStoreCompletion) {
         if self.currentBatchIndex > 0 {
             for index in 0...self.currentBatchIndex-1 {
-                let path = try getFilePath(batchIndex: index)
-                do {
-                    try FileManager.default.removeItem(atPath: path)
-                } catch {
-                    throw FileEventStoreError.couldNotDelete
+                if let path = getFilePath(batchIndex: index) {
+                    do {
+                        try FileManager.default.removeItem(atPath: path)
+                    } catch {
+                        completion(FileEventStoreError.couldNotDelete)
+                        return
+                    }
                 }
             }
         }
         self.batchCache.removeAll()
         self.currentBatchIndex = 0
+        completion(nil)
     }
     
     // MARK: Private
     
     // Fetch the stored event file, create it if it doesn't exist
-    private func getFilePath(batchIndex: Int) throws -> String {
+    private func getFilePath(batchIndex: Int) -> String? {
         if let path =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let fullPath = path.appendingPathComponent(String(batchIndex) + "_" + self.fileName).path
             if !FileManager.default.fileExists(atPath: fullPath) {
                 FileManager.default.createFile(atPath: fullPath, contents: nil, attributes: nil)
             }
             return fullPath
-        } else {
-            throw FileEventStoreError.fileNotFound
         }
+        return nil
     }
     
     // Write current batch to file, then delete cached events and increment batch counter
-    private func writeBatchToFile() throws {
-        let path = try getFilePath(batchIndex: self.currentBatchIndex)
-        NSKeyedArchiver.archiveRootObject(self.batchCache, toFile: path)
-        
-        self.batchCache.removeAll()
-        self.currentBatchIndex+=1
+    private func writeBatchToFile(completion: EventStoreCompletion) {
+        if let path = getFilePath(batchIndex: self.currentBatchIndex) {
+            NSKeyedArchiver.archiveRootObject(self.batchCache, toFile: path)
+            self.batchCache.removeAll()
+            self.currentBatchIndex+=1
+            completion(nil)
+        } else {
+            completion(FileEventStoreError.fileNotFound)
+        }
     }
-
 }
