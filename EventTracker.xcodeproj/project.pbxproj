@@ -18,10 +18,7 @@
 		2838770A1DD43AA10012185E /* EventTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283877001DD438E10012185E /* EventTracker.swift */; };
 		2838770B1DD43AA50012185E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283876FF1DD438E10012185E /* Event.swift */; };
 		2838770C1DD43AA90012185E /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283877021DD438E10012185E /* EventStore.swift */; };
-		283877101DD4470D0012185E /* EventFlushPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2838770F1DD4470D0012185E /* EventFlushPolicy.swift */; };
-		283877111DD4470D0012185E /* EventFlushPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2838770F1DD4470D0012185E /* EventFlushPolicy.swift */; };
 		283877131DD6B53B0012185E /* TestEventLoggerUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283877121DD6B53B0012185E /* TestEventLoggerUploader.swift */; };
-		2842FCD21DD7BBB10071A2EA /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2842FCD11DD7BBB10071A2EA /* File.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,9 +42,7 @@
 		283877001DD438E10012185E /* EventTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTracker.swift; sourceTree = "<group>"; };
 		283877011DD438E10012185E /* EventFlusher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFlusher.swift; sourceTree = "<group>"; };
 		283877021DD438E10012185E /* EventStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
-		2838770F1DD4470D0012185E /* EventFlushPolicy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFlushPolicy.swift; sourceTree = "<group>"; };
 		283877121DD6B53B0012185E /* TestEventLoggerUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestEventLoggerUploader.swift; sourceTree = "<group>"; };
-		2842FCD11DD7BBB10071A2EA /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,10 +88,8 @@
 				283876E81DD433FA0012185E /* EventTracker.h */,
 				283876FF1DD438E10012185E /* Event.swift */,
 				283877001DD438E10012185E /* EventTracker.swift */,
-				2842FCD11DD7BBB10071A2EA /* File.swift */,
 				283877011DD438E10012185E /* EventFlusher.swift */,
 				283877021DD438E10012185E /* EventStore.swift */,
-				2838770F1DD4470D0012185E /* EventFlushPolicy.swift */,
 				283876E91DD433FA0012185E /* Info.plist */,
 			);
 			path = EventTracker;
@@ -225,8 +218,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				283877101DD4470D0012185E /* EventFlushPolicy.swift in Sources */,
-				2842FCD21DD7BBB10071A2EA /* File.swift in Sources */,
 				283877041DD438E10012185E /* EventTracker.swift in Sources */,
 				283877031DD438E10012185E /* Event.swift in Sources */,
 				283877061DD438E10012185E /* EventStore.swift in Sources */,
@@ -242,7 +233,6 @@
 				283876F41DD433FA0012185E /* EventTrackerTests.swift in Sources */,
 				2838770C1DD43AA90012185E /* EventStore.swift in Sources */,
 				2838770A1DD43AA10012185E /* EventTracker.swift in Sources */,
-				283877111DD4470D0012185E /* EventFlushPolicy.swift in Sources */,
 				283877091DD43A8C0012185E /* EventFlusher.swift in Sources */,
 				2838770B1DD43AA50012185E /* Event.swift in Sources */,
 			);

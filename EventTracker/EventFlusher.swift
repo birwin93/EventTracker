@@ -8,6 +8,12 @@
 
 import Foundation
 
+public enum EventFlushPolicy {
+    case Manual
+    case EventLimit(limit: Int)
+    case TimeInterval(interval: TimeInterval)
+}
+
 public typealias EventFlushCompletion = ((Error?) -> Void)
 
 public protocol EventFlusher {
@@ -22,5 +28,4 @@ public class LogFlusher: EventFlusher {
         }
         completion(nil)
     }
-    
 }

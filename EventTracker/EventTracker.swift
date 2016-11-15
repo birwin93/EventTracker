@@ -173,8 +173,10 @@ public final class EventTracker {
         }
         
         var completion: EventStoreCompletion?
+        weak var tracker: EventTracker?
         
-        init(completion: EventStoreCompletion?) {
+        init(tracker: EventTracker, completion: EventStoreCompletion?) {
+            self.tracker = tracker
             self.completion = completion
         }
         
@@ -196,13 +198,11 @@ public final class EventTracker {
     
     class TrackEventOperation : AsyncBlockOperation {
         
-        weak var tracker: EventTracker?
         var event: Event
         
         init(event: Event, tracker: EventTracker, completion: EventStoreCompletion?) {
             self.event = event
-            self.tracker = tracker
-            super.init(completion: completion)
+            super.init(tracker: tracker, completion: completion)
         }
         
         override func execute() {
@@ -227,14 +227,6 @@ public final class EventTracker {
     }
     
     class FlushOperation : AsyncBlockOperation {
-        
-        weak var tracker: EventTracker?
-    
-        init(tracker: EventTracker, completion: EventStoreCompletion?) {
-            self.tracker = tracker
-            super.init(completion: completion)
-        }
-        
         override func execute() {
             self.tracker?.flushStore { [weak self] (error) in
                 if let c = self?.completion {
@@ -246,14 +238,6 @@ public final class EventTracker {
     }
     
     class ClearOperation : AsyncBlockOperation {
-        
-        weak var tracker: EventTracker?
-        
-        init(tracker: EventTracker, completion: EventStoreCompletion?) {
-            self.tracker = tracker
-            super.init(completion: completion)
-        }
-        
         override func execute() {
             self.tracker?.clearStore { [weak self] (error) in
                 if let c = self?.completion {
