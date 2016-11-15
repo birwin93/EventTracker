@@ -8,7 +8,7 @@
 
 import Foundation
 
-typealias EventTrackerCompletion = ((Error?) -> Void)
+public typealias EventTrackerCompletion = ((Error?) -> Void)
 
 public struct EventTrackerConfiguration {
     let store: EventStore
@@ -45,21 +45,33 @@ public final class EventTracker {
     
     // MARK: Public Methods
     
+    func trackEvent(event: Event) {
+        self.trackEvent(event: event, completion: nil)
+    }
+
     func trackEvent(event: Event, completion: EventTrackerCompletion?) {
         let op = TrackEventOperation(event: event, tracker: self, completion: completion)
         self.operationQueue.addOperation(op)
     }
-    
-    @objc func flushEvents(completion: EventTrackerCompletion?) {
+
+    func flushEvents() {
+        self.flushEvents(completion: nil)
+    }
+
+    func flushEvents(completion: EventTrackerCompletion?) {
         let op = FlushOperation(tracker: self, completion: completion)
         self.operationQueue.addOperation(op)
     }
-    
+
+    func clearEvents() {
+        self.clearEvents(completion: nil)
+    }
+
     func clearEvents(completion: EventTrackerCompletion?) {
         let op = ClearOperation(tracker: self, completion: completion)
         self.operationQueue.addOperation(op)
     }
-    
+
     // MARK: Helper Methods
         
     private func preTrackActions(completion: @escaping EventTrackerCompletion) {
@@ -115,9 +127,13 @@ public final class EventTracker {
         }
     }
     
+    @objc private func flushEventsOnTimer() {
+        self.flushEvents()
+    }
+
     private func startTimerIfNecessary(interval: TimeInterval) {
         guard let _ = self.flushTimer else {
-            self.flushTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(flushEvents), userInfo: nil, repeats: true)
+            self.flushTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(flushEventsOnTimer), userInfo: nil, repeats: true)
             return
         }
     }

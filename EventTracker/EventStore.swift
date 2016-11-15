@@ -37,7 +37,7 @@ public class InMemoryEventStore : EventStore {
     
 }
 
-enum FileEventStoreError: Error {
+public enum FileEventStoreError: Error {
     case fileNotFound
     case couldNotWrite
     case couldNotRead
