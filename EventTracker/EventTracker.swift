@@ -80,11 +80,11 @@ public final class EventTracker {
     }
     
     private func flushStoreIfNecessary(limit: Int, completion: @escaping EventTrackerCompletion) {
-        self.store.allEvents { (events, error) in
+        self.store.allEvents { [weak self] (events, error) in
             if let err = error {
                 completion(err)
             } else if events.count >= limit {
-                self.flushStore { (error) in
+                self?.flushStore { (error) in
                     completion(error)
                 }
             } else {
@@ -94,15 +94,15 @@ public final class EventTracker {
     }
     
     private func flushStore(completion: @escaping EventTrackerCompletion) {
-        self.store.allEvents { (events, error) in
+        self.store.allEvents { [weak self] (events, error) in
             if let err = error {
                 completion(err)
             } else {
-                self.flusher.flushEvents(events: events, completion: { (error) in
+                self?.flusher.flushEvents(events: events, completion: { [weak self] (error) in
                     if let err = error {
                         completion(err)
                     } else {
-                        self.clearStore(completion: completion)
+                        self?.clearStore(completion: completion)
                     }
                 })
             }
@@ -190,19 +190,21 @@ public final class EventTracker {
         }
         
         override func execute() {
-            self.tracker?.preTrackActions { (error) in
+            self.tracker?.preTrackActions { [weak self] (error) in
                 if let err = error {
-                    if let c = self.completion {
+                    if let c = self?.completion {
                         c(err)
                     }
-                    self.finish()
+                    self?.finish()
                 } else {
-                    self.tracker?.store.storeEvent(event: self.event, completion: { (error) in
-                        if let c = self.completion {
-                            c(error)
-                        }
-                        self.finish()
-                    })
+                    if let strongSelf = self {
+                        strongSelf.tracker?.store.storeEvent(event: strongSelf.event, completion: { [weak self] (error) in
+                            if let c = self?.completion {
+                                c(error)
+                            }
+                            self?.finish()
+                        })
+                    }
                 }
             }
         }
@@ -218,11 +220,11 @@ public final class EventTracker {
         }
         
         override func execute() {
-            self.tracker?.flushStore { (error) in
-                if let c = self.completion {
+            self.tracker?.flushStore { [weak self] (error) in
+                if let c = self?.completion {
                     c(error)
                 }
-                self.finish()
+                self?.finish()
             }
         }
     }
@@ -237,11 +239,11 @@ public final class EventTracker {
         }
         
         override func execute() {
-            self.tracker?.clearStore { (error) in
-                if let c = self.completion {
+            self.tracker?.clearStore { [weak self] (error) in
+                if let c = self?.completion {
                     c(error)
                 }
-                self.finish()
+                self?.finish()
             }
         }
     }
