@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = "EventTracker"
-  spec.version = "1.0.0"
+  spec.version = "0.1.0"
   spec.summary = "Framework to log events"
   spec.homepage = "https://github.com/birwin93/EventTracker"
   spec.license = { type: 'MIT', file: 'LICENSE' }
@@ -9,6 +9,6 @@ Pod::Spec.new do |spec|
 
   spec.platform = :ios, "9.0"
   spec.requires_arc = true
-  spec.source = { git: "https://github.com/birwin93/EventTracker.git", tag: "v#{spec.version}", submodules: true }
+  spec.source = { git: "https://github.com/birwin93/EventTracker.git", tag: "#{s.version}" }
   spec.source_files = "EventTracker/**/*.{h,swift}"
 end
