@@ -20,7 +20,7 @@ public enum EventTrackerError: Error {
     case noUploader
 }
 
-public final class EventTracker {
+public class EventTracker {
     
     private let store: EventStore
     private let flusher: EventFlusher
@@ -37,7 +37,7 @@ public final class EventTracker {
         return queue
     }()
     
-    init(configuration: EventTrackerConfiguration) {
+    public init(configuration: EventTrackerConfiguration) {
         self.store = configuration.store
         self.flusher = configuration.flusher
         self.flushPolicy = configuration.flushPolicy
@@ -45,29 +45,29 @@ public final class EventTracker {
     
     // MARK: Public Methods
     
-    func trackEvent(event: Event) {
+    public func trackEvent(event: Event) {
         self.trackEvent(event: event, completion: nil)
     }
 
-    func trackEvent(event: Event, completion: EventTrackerCompletion?) {
+    public func trackEvent(event: Event, completion: EventTrackerCompletion?) {
         let op = TrackEventOperation(event: event, tracker: self, completion: completion)
         self.operationQueue.addOperation(op)
     }
 
-    func flushEvents() {
+    public func flushEvents() {
         self.flushEvents(completion: nil)
     }
 
-    func flushEvents(completion: EventTrackerCompletion?) {
+    public func flushEvents(completion: EventTrackerCompletion?) {
         let op = FlushOperation(tracker: self, completion: completion)
         self.operationQueue.addOperation(op)
     }
 
-    func clearEvents() {
+    public func clearEvents() {
         self.clearEvents(completion: nil)
     }
 
-    func clearEvents(completion: EventTrackerCompletion?) {
+    public func clearEvents(completion: EventTrackerCompletion?) {
         let op = ClearOperation(tracker: self, completion: completion)
         self.operationQueue.addOperation(op)
     }
@@ -140,7 +140,7 @@ public final class EventTracker {
     
     // MARK: Custom Operations
     
-    class AsyncBlockOperation : Operation {
+    private class AsyncBlockOperation : Operation {
         
         override var isAsynchronous: Bool {
             return true
@@ -196,7 +196,7 @@ public final class EventTracker {
         }
     }
     
-    class TrackEventOperation : AsyncBlockOperation {
+    private class TrackEventOperation : AsyncBlockOperation {
         
         var event: Event
         
@@ -226,7 +226,7 @@ public final class EventTracker {
         }
     }
     
-    class FlushOperation : AsyncBlockOperation {
+    private class FlushOperation : AsyncBlockOperation {
         override func execute() {
             self.tracker?.flushStore { [weak self] (error) in
                 if let c = self?.completion {
@@ -237,7 +237,7 @@ public final class EventTracker {
         }
     }
     
-    class ClearOperation : AsyncBlockOperation {
+    private class ClearOperation : AsyncBlockOperation {
         override func execute() {
             self.tracker?.clearStore { [weak self] (error) in
                 if let c = self?.completion {

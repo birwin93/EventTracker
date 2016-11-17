@@ -22,6 +22,8 @@ public protocol EventFlusher {
 
 public class LogFlusher: EventFlusher {
     
+    public init() {}
+    
     public func flushEvents(events: [Event], completion: @escaping EventFlushCompletion) {
         for event in events {
             print(event.toString())

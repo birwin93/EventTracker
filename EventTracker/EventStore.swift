@@ -21,6 +21,8 @@ public class InMemoryEventStore : EventStore {
     
     private var cache = [Event]()
     
+    public init() {}
+    
     public func storeEvent(event: Event, completion: @escaping EventStoreCompletion) {
         self.cache.append(event)
         completion(nil)
@@ -55,15 +57,15 @@ public class FileEventStore : EventStore {
     private var currentBatchIndex = 0
     private var batchCache = [Event]()
     
-    convenience init() {
+    public convenience init() {
         self.init(fileName: FileEventStore.defaultFileName, batchSize: FileEventStore.defaultBatchSize)
     }
     
-    convenience init(batchSize: Int) {
+    public convenience init(batchSize: Int) {
         self.init(fileName: FileEventStore.defaultFileName, batchSize: batchSize)
     }
     
-    init(fileName: String, batchSize: Int) {
+    public init(fileName: String, batchSize: Int) {
         self.fileName = fileName
         self.batchSize = batchSize
     }
