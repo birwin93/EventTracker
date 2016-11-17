@@ -9,6 +9,6 @@ Pod::Spec.new do |spec|
 
   spec.platform = :ios, "9.0"
   spec.requires_arc = true
-  spec.source = { git: "https://github.com/birwin93/EventTracker.git", tag: "#{s.version}" }
+  spec.source = { git: "https://github.com/birwin93/EventTracker.git", tag: "#{spec.version}" }
   spec.source_files = "EventTracker/**/*.{h,swift}"
 end
