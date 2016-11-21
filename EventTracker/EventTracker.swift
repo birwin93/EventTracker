@@ -14,6 +14,12 @@ public struct EventTrackerConfiguration {
     let store: EventStore
     let flusher: EventFlusher
     let flushPolicy: EventFlushPolicy
+    
+    public init(store: EventStore, flusher: EventFlusher, flushPolicy: EventFlushPolicy) {
+        self.store = store
+        self.flusher = flusher
+        self.flushPolicy = flushPolicy
+    }
 }
 
 public enum EventTrackerError: Error {
