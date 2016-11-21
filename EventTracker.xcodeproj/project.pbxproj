@@ -19,7 +19,6 @@
 		2838770B1DD43AA50012185E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283876FF1DD438E10012185E /* Event.swift */; };
 		2838770C1DD43AA90012185E /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283877021DD438E10012185E /* EventStore.swift */; };
 		283877131DD6B53B0012185E /* TestEventLoggerUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283877121DD6B53B0012185E /* TestEventLoggerUploader.swift */; };
-		2842FD2C1DDE7E470071A2EA /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 2842FD2B1DDE7E470071A2EA /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,7 +43,6 @@
 		283877011DD438E10012185E /* EventFlusher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFlusher.swift; sourceTree = "<group>"; };
 		283877021DD438E10012185E /* EventStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
 		283877121DD6B53B0012185E /* TestEventLoggerUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestEventLoggerUploader.swift; sourceTree = "<group>"; };
-		2842FD2B1DDE7E470071A2EA /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +90,6 @@
 				283877001DD438E10012185E /* EventTracker.swift */,
 				283877011DD438E10012185E /* EventFlusher.swift */,
 				283877021DD438E10012185E /* EventStore.swift */,
-				2842FD2B1DDE7E470071A2EA /* README.md */,
 				283876E91DD433FA0012185E /* Info.plist */,
 			);
 			path = EventTracker;
@@ -223,7 +220,6 @@
 			files = (
 				283877041DD438E10012185E /* EventTracker.swift in Sources */,
 				283877031DD438E10012185E /* Event.swift in Sources */,
-				2842FD2C1DDE7E470071A2EA /* README.md in Sources */,
 				283877061DD438E10012185E /* EventStore.swift in Sources */,
 				283877051DD438E10012185E /* EventFlusher.swift in Sources */,
 			);
