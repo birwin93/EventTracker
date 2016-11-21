@@ -5,27 +5,27 @@ First define an Event to track
 ```swift
 class UserImpressionEvent : NSObject, Event {
 
-let user: String
+  let user: String
 
-init(user: String) {
-self.user = user
-super.init()
-}
+  init(user: String) {
+    self.user = user
+    super.init()
+  }
 
-// All objects that conform to Event must implement toString()
-func toString() -> String {
-return "impression:" + self.user
-}
+  // All objects that conform to Event must implement toString()
+  func toString() -> String {
+    return "impression:" + self.user
+  }
 
-// All objects that conform to Event must also conform to NSCoding
-func encode(with aCoder: NSCoder) {
-aCoder.encode(self.user, forKey: "user")
-}
+  // All objects that conform to Event must also conform to NSCoding
+  func encode(with aCoder: NSCoder) {
+    aCoder.encode(self.user, forKey: "user")
+  }
 
-required convenience init?(coder aDecoder: NSCoder) {
-guard let user = aDecoder.decodeObject(forKey: "user") as? String else { return nil }
-self.init(user: user)
-}
+  required convenience init?(coder aDecoder: NSCoder) {
+    guard let user = aDecoder.decodeObject(forKey: "user") as? String else { return nil }
+    self.init(user: user)
+  }
 }
 ```
 
@@ -49,13 +49,13 @@ let tracker = EventTracker(configuration: configuration)
 Then track
 ```swift
 override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-let user = self.users[indexPath.row]
-cell.render(user)
+  let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+  let user = self.users[indexPath.row]
+  cell.render(user)
 
-// Track that the user was shown
-tracker.trackEvent(event: UserImpressionEvent(user: user))
-return cell
+  // Track that the user was shown
+  tracker.trackEvent(event: UserImpressionEvent(user: user))
+  return cell
 }
 ```
 
@@ -68,7 +68,7 @@ EventTracker was designed to give developers complete control over how events ar
 ```swift
 @objc
 public protocol Event: class, NSCoding {
-func toString() -> String
+  func toString() -> String
 }
 ```
 All tracked events must conform to the Event protocol. Event extends NSCoding to ensure that all events can be serialized/deserialized for storage.
@@ -77,9 +77,9 @@ All tracked events must conform to the Event protocol. Event extends NSCoding to
 
 ```swift
 public protocol EventStore {
-func storeEvent(event: Event, completion: @escaping EventStoreCompletion)
-func allEvents(completion: @escaping EventStoreReturnCompletion)
-func deleteEvents(completion: @escaping EventStoreCompletion)
+  func storeEvent(event: Event, completion: @escaping EventStoreCompletion)
+  func allEvents(completion: @escaping EventStoreReturnCompletion)
+  func deleteEvents(completion: @escaping EventStoreCompletion)
 }
 ```
 Classes that conform to EventStore are used to temporarily cache tracked events before uploading them from the client. Events can be stored in whatever manner best suits the developer. The EventTracker currently comes with two concrete EventStore classes, InMemeoryEventStore and FileEventStore, which store events in memory and files, respectively. 
@@ -88,7 +88,7 @@ Classes that conform to EventStore are used to temporarily cache tracked events 
 
 ```swift
 public protocol EventFlusher {
-func flushEvents(events: [Event], completion: @escaping EventFlushCompletion)
+  func flushEvents(events: [Event], completion: @escaping EventFlushCompletion)
 }
 ```
 Class that conform to EventFlusher are responsible for emitting tracked events. EventFlushers can be used to log all recorded events, write them to a file, or most likely, upload all tracked events to a remote server. 
@@ -101,9 +101,9 @@ In addition, developers can define when to flush using an EventFlushPolicy. Poss
 ### EventTracker
 ```swift
 public class EventTracker {
-public func trackEvent(event: Event, completion: EventTrackerCompletion?)
-public func flushEvents(completion: EventTrackerCompletion?)
-public func clearEvents(completion: EventTrackerCompletion?)
+  public func trackEvent(event: Event, completion: EventTrackerCompletion?)
+  public func flushEvents(completion: EventTrackerCompletion?)
+  public func clearEvents(completion: EventTrackerCompletion?)
 }
 ```
 
@@ -144,7 +144,7 @@ Frameworks and Libraries**.
 ### Contact Info
 Email: [birwin93@gmail.com](mailto:birwin93@gmail.com)
 
-Twitter: [@billy_the_kid](https://twitter.com/JeffHurray)
+Twitter: [@billy_the_kid](https://twitter.com/billy_the_kid)
 
 ### Contributing
 If you want to add functionality please open an issue and/or create a pull request.
