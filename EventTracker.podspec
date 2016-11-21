@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = "EventTracker"
-  spec.version = "0.1.0"
+  spec.version = "0.1.1"
   spec.summary = "Framework to log events"
   spec.homepage = "https://github.com/birwin93/EventTracker"
   spec.license = { type: 'MIT', file: 'LICENSE' }
